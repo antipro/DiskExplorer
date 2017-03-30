@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QSettings *config = new QSettings("config.ini", QSettings::IniFormat);
 	// 请在config.ini中添加好自己的Token。
-	token = config->value("token", QVariant("OAuth XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")).toByteArray();
+	token = config->value("token", QVariant("OAth")).toByteArray();
     if(config->isWritable())
         config->setValue("token", QString(token));
     delete config;
