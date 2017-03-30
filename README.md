@@ -3,6 +3,7 @@
 ## 编译环境
 * Qt 5.5.1 MSVC2013 64bit
 * Qt Creator 4.2.1
+* OpenSSL-Win64
 
 这是一个连接到Yandex网盘API的工具，可以按照片墙的形式显示出图片，程序初次启动会在当前目录下生成config.ini文件，需要把你自己的Token填写进去，也可以通过File->Token菜单来修改。
 > Yandex的网盘速度不快
