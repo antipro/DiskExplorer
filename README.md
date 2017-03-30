@@ -16,4 +16,4 @@
 1. GetAll会将该文件夹下的所有图片显示出来，小心你的内存。
 1. 在图片上或者列表中点击鼠标右键有移动和删除图片的功能。
 
-![界面预览](http://onmdsye1w.bkt.clouddn.com/preview.png)
+ ![界面预览](http://onmdsye1w.bkt.clouddn.com/preview.png)
