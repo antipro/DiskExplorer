@@ -10,7 +10,7 @@
 
 ## 使用方法
 1. 想办法获取自己的Token。
-1. File->Token 设置自己的Token。
+1. File->Token 设置自己的Token，Token的格式应该是“OAuth AAAAAAAAAAAAAAAAAAAAAAAAAAAA”这样的格式，注意中间有一个空格。
 1. File->Connect 连接到自己的网盘。
 1. 下拉列表中的是文件夹，只能显示顶层的。
 1. 切换文件夹，下方列表显示图片名称和预览图，双击显示到右边，右侧的布局是流式布局。
