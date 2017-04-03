@@ -10,6 +10,8 @@
 
 ## 使用方法
 1. 想办法获取自己的Token。
+    * 先看[指南](https://tech.yandex.com/oauth/doc/dg/reference/web-client-docpage/)
+    * 需要有一个自己的服务器，要有域名，能有一个PHP脚本接收Token。
 1. File->Token 设置自己的Token，Token的格式应该是“OAuth AAAAAAAAAAAAAAAAAAAAAAAAAAAA”这样的格式，注意中间有一个空格。
 1. File->Connect 连接到自己的网盘。
 1. 下拉列表中的是文件夹，只能显示顶层的。
