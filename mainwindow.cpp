@@ -301,8 +301,11 @@ void MainWindow::changeToken()
     QString text = QInputDialog::getText(this, tr("New Token"),
                                          tr("Token:"), QLineEdit::Normal,
                                          token, &ok);
-    if (ok && !text.isEmpty())
+    if (ok && !text.isEmpty()){
         this->token = text.toLatin1();
+        QSettings *config = new QSettings("config.ini", QSettings::IniFormat);
+        config->setValue("token", text);
+    }
 }
 
 void MainWindow::exit()
