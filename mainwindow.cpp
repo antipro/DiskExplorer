@@ -107,6 +107,7 @@ void MainWindow::setupUiEx()
 	ui->listView->addAction(moveTo);
 
 	aboutDialog = new About(this);
+    refDialog = new Prerefrence(this);
 
 	ui->actionSimple_Chinese->setData("Simple Chinese");
 	ui->actionEnglish->setData("English");
@@ -345,7 +346,12 @@ void MainWindow::switchSideBar()
 
 void MainWindow::about()
 {
-	aboutDialog->show();
+    aboutDialog->show();
+}
+
+void MainWindow::prerefrence()
+{
+    refDialog->show();
 }
 
 void MainWindow::switchLang(QAction *action)

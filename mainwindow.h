@@ -18,6 +18,7 @@
 #include "flowlayout.h"
 #include "imagelabel.h"
 #include "about.h"
+#include "prerefrence.h"
 
 Q_DECLARE_METATYPE(QStandardItem*)
 
@@ -56,6 +57,7 @@ private slots:
     void getAll();
     void switchSideBar();
 	void about();
+    void prerefrence();
 	void switchLang(QAction *action);
 	void newFolder();
 	void uploadFile();
@@ -68,6 +70,7 @@ private:
     Ui::MainWindow *ui;
 	QTranslator translator;
 	About *aboutDialog;
+    Prerefrence *refDialog;
 	QStandardItemModel *model;
 	QNetworkDiskCache *diskCache;
     QByteArray token;

@@ -16,15 +16,18 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     flowlayout.cpp \
     about.cpp \
-    imagelabel.cpp
+    imagelabel.cpp \
+    prerefrence.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
     about.h \
-    imagelabel.h
+    imagelabel.h \
+    prerefrence.h
 
 FORMS    += mainwindow.ui \
-    about.ui
+    about.ui \
+    prerefrence.ui
 
 RESOURCES += \
     resource.qrc

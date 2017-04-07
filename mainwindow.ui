@@ -105,7 +105,7 @@
           <x>0</x>
           <y>0</y>
           <width>298</width>
-          <height>323</height>
+          <height>312</height>
          </rect>
         </property>
        </widget>
@@ -120,7 +120,7 @@
      <x>0</x>
      <y>0</y>
      <width>581</width>
-     <height>23</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -159,6 +159,8 @@
     <addaction name="actionUpload_File"/>
     <addaction name="actionNew_Folder"/>
     <addaction name="actionDelete_Folder"/>
+    <addaction name="separator"/>
+    <addaction name="actionPrerefrence"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -256,6 +258,11 @@
   <action name="actionRefresh">
    <property name="text">
     <string>Refresh</string>
+   </property>
+  </action>
+  <action name="actionPrerefrence">
+   <property name="text">
+    <string>Prerefrence</string>
    </property>
   </action>
  </widget>
@@ -425,14 +432,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>menuLanguage</sender>
-   <signal>triggered(QAction*)</signal>
+   <sender>actionPrerefrence</sender>
+   <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>switchLang(QAction*)</slot>
+   <slot>prerefrence()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>73</x>
-     <y>46</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>290</x>
@@ -453,5 +460,6 @@
   <slot>newFolder()</slot>
   <slot>deleteFolder()</slot>
   <slot>refreshFolder()</slot>
+  <slot>prerefrence()</slot>
  </slots>
 </ui>
