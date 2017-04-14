@@ -5,7 +5,7 @@
 * Qt Creator 4.2.1
 * OpenSSL
     * Win64 [下载](https://slproweb.com/products/Win32OpenSSL.html) （我下载的是1.0.1u light版）
-	* Linux 未知（Ubuntu默认就可以了）
+    * Linux 未知（Ubuntu默认就可以了）
 
 这是一个连接到Yandex网盘API的工具，可以按照片墙的形式显示出图片，程序初次启动会在当前目录下生成config.ini文件，需要把你自己的Token填写进去，也可以通过File->Token菜单来修改。
 > Yandex的网盘速度不快
@@ -22,3 +22,7 @@
 1. 在图片上或者列表中点击鼠标右键有移动和删除图片的功能。
 
  ![界面预览](http://onmdsye1w.bkt.clouddn.com/preview.png)
+
+
+## 可能的问题
+* Linux下编译提示缺少GL/gl.h，应该是需要安装mesa-dev相关的包，里面有OPENGL的内容。

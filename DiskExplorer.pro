@@ -38,7 +38,8 @@ DISTFILES += \
     translations/en_US.ts \
     translations/zh_CN.ts \
     README.md \
-    LICENSE
+    LICENSE \
+    TODO.md
 
 TRANSLATIONS += translations/zh_CN.ts \
 	translations/en_US.ts
