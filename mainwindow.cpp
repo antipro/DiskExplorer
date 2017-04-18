@@ -19,6 +19,48 @@ MainWindow::MainWindow(QWidget *parent) :
 	diskCache = new QNetworkDiskCache(this);
     diskCache->setCacheDirectory("cacheDir");
 	diskCache->setMaximumCacheSize(104857600);
+	
+	downloadManager = new QNetworkAccessManager(this);
+	downloadManager->setCache(diskCache);
+	connect(downloadManager, &QNetworkAccessManager::finished, [this](QNetworkReply *reply) {
+		QModelIndex index = this->replyMap[reply];
+		this->replyMap.erase(reply);
+		if (reply->error() != QNetworkReply::NoError)
+		{
+			ui->statusBar->showMessage(reply->errorString());
+			return;
+		}
+		int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+		if(statusCode == 302)
+		{
+			QUrl newUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+			qDebug() << "redirected to " + newUrl.toString();
+			downloadFile(index, newUrl);
+			return;
+		}
+		ui->listView->model()->setData(index, reply->url().toString(), MainWindow::DOWNLOAD_URL);
+		QByteArray *bytes = new QByteArray(reply->readAll());
+		QVariant fromCache = reply->attribute(QNetworkRequest::SourceIsFromCacheAttribute);
+		qDebug() << "page from cache?" << fromCache.toBool();
+		QString contentType = reply->header(QNetworkRequest::ContentTypeHeader).toString();
+		ImageLabel *label = getImageLabel();
+		label->setProperty("path", ui->listView->model()->data(index, MainWindow::PATH));
+		label->setProperty("folderName", ui->listView->model()->data(index, MainWindow::FOLDER_NAME));
+		label->setProperty("fileName", ui->listView->model()->data(index, MainWindow::FILE_NAME));
+		//label->setToolTip(ui->listView->model()->data(index, MainWindow::PATH).toString());
+		if(contentType == "image/gif"){
+			QBuffer *buffer = new QBuffer(bytes);
+			QMovie *movie = new QMovie(buffer);
+			label->setMovie(movie);
+			movie->start();
+		}else{
+			QPixmap pixmap;
+			pixmap.loadFromData(*bytes);
+			label->setPixmap(pixmap);
+		}
+		ui->scrollAreaWidgetContents->layout()->addWidget(label);
+		reply->deleteLater();
+	});
 }
 
 MainWindow::~MainWindow()
@@ -216,46 +258,8 @@ ImageLabel* MainWindow::getImageLabel()
 void MainWindow::downloadFile(const QModelIndex &index, const QUrl &url)
 {
 	QNetworkRequest request = getRequest(url);
-	QNetworkAccessManager *netManager = new QNetworkAccessManager(this);
-	netManager->setCache(diskCache);
-	connect(netManager, &QNetworkAccessManager::finished, [index, this](QNetworkReply *reply) {
-		if (reply->error() != QNetworkReply::NoError)
-		{
-			ui->statusBar->showMessage(reply->errorString());
-			return;
-		}
-		int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-		if(statusCode == 302)
-		{
-			QUrl newUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-			qDebug() << "redirected to " + newUrl.toString();
-			downloadFile(index, newUrl);
-			return;
-		}
-		ui->listView->model()->setData(index, reply->url().toString(), MainWindow::DOWNLOAD_URL);
-		QByteArray *bytes = new QByteArray(reply->readAll());
-		QVariant fromCache = reply->attribute(QNetworkRequest::SourceIsFromCacheAttribute);
-		qDebug() << "page from cache?" << fromCache.toBool();
-		QString contentType = reply->header(QNetworkRequest::ContentTypeHeader).toString();
-		ImageLabel *label = getImageLabel();
-		label->setProperty("path", ui->listView->model()->data(index, MainWindow::PATH));
-		label->setProperty("folderName", ui->listView->model()->data(index, MainWindow::FOLDER_NAME));
-		label->setProperty("fileName", ui->listView->model()->data(index, MainWindow::FILE_NAME));
-		//label->setToolTip(ui->listView->model()->data(index, MainWindow::PATH).toString());
-		if(contentType == "image/gif"){
-			QBuffer *buffer = new QBuffer(bytes);
-			QMovie *movie = new QMovie(buffer);
-			label->setMovie(movie);
-			movie->start();
-		}else{
-			QPixmap pixmap;
-			pixmap.loadFromData(*bytes);
-			label->setPixmap(pixmap);
-		}
-		ui->scrollAreaWidgetContents->layout()->addWidget(label);
-		reply->deleteLater();
-	});
-	QNetworkReply *reply = netManager->get(request);
+	QNetworkReply *reply = downloadManager->get(request);
+	replyMap[reply] = index;
 	connect(reply, &QNetworkReply::downloadProgress, [this](qint64 bytesReceived, qint64 bytesTotal) {
 		//qDebug() << bytesReceived << ":" << bytesTotal;
 		if(bytesTotal <= 0) return;

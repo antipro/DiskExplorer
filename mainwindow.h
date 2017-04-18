@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <map>
 #include <QMainWindow>
 #include <QNetworkReply>
 #include <QNetworkDiskCache>
@@ -67,6 +68,7 @@ private slots:
 	void on_listView_doubleClicked(const QModelIndex &index);
 
 private:
+	std::map<QNetworkReply*, QModelIndex> replyMap;
     Ui::MainWindow *ui;
 	QTranslator translator;
 	About *aboutDialog;
@@ -78,6 +80,7 @@ private:
 	QStandardItem* getViewItem(const QString &name, const QString &preview);
     void setupUiEx();
 	ImageLabel * getImageLabel();
+	QNetworkAccessManager *downloadManager;
 };
 
 #endif // MAINWINDOW_H
