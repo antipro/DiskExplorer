@@ -6,15 +6,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setupUiEx();
-	qApp->installTranslator(&translator);
-
-    QSettings *config = new QSettings("config.ini", QSettings::IniFormat);
-	// 请在config.ini中添加好自己的Token。
-	token = config->value("token", QVariant("OAth")).toByteArray();
+    config = new QSettings("config.ini", QSettings::IniFormat);
+    // 请在config.ini中添加好自己的Token。
+    token = config->value("token", QVariant("OAth")).toByteArray();
     if(config->isWritable())
         config->setValue("token", QString(token));
-    delete config;
+    setupUiEx();
+	qApp->installTranslator(&translator);
 
 	diskCache = new QNetworkDiskCache(this);
     diskCache->setCacheDirectory("cacheDir");
@@ -28,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 		if (reply->error() != QNetworkReply::NoError)
 		{
 			ui->statusBar->showMessage(reply->errorString());
-			return;
+            return;
 		}
 		int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 		if(statusCode == 302)
@@ -56,6 +54,20 @@ MainWindow::MainWindow(QWidget *parent) :
 		}else{
 			QPixmap pixmap;
 			pixmap.loadFromData(*bytes);
+            int sizePolicy = config->value("size_policy", QVariant(0)).toInt();
+            switch(sizePolicy){
+            case 0:
+                break;
+            case 1:{
+                int maxSize = config->value("max_size", QVariant(300)).toInt();
+                pixmap = pixmap.scaled(maxSize, maxSize, Qt::KeepAspectRatio);
+            }break;
+            case 2:{
+                int maxSize = ui->scrollArea->width();
+                //pixmap = pixmap.scaled(maxSize, maxSize, Qt::KeepAspectRatio);
+                pixmap = pixmap.scaledToWidth(maxSize);
+            }
+            }
 			label->setPixmap(pixmap);
 		}
 		ui->scrollAreaWidgetContents->layout()->addWidget(label);
@@ -66,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete config;
 }
 
 void MainWindow::setupUiEx()
@@ -149,7 +162,7 @@ void MainWindow::setupUiEx()
 	ui->listView->addAction(moveTo);
 
 	aboutDialog = new About(this);
-    refDialog = new Prerefrence(this);
+    refDialog = new Prerefrence(config, this);
 
 	ui->actionSimple_Chinese->setData("Simple Chinese");
 	ui->actionEnglish->setData("English");
@@ -308,7 +321,6 @@ void MainWindow::changeToken()
                                          token, &ok);
     if (ok && !text.isEmpty()){
         this->token = text.toLatin1();
-        QSettings *config = new QSettings("config.ini", QSettings::IniFormat);
         config->setValue("token", text);
     }
 }

@@ -81,6 +81,7 @@ private:
     void setupUiEx();
 	ImageLabel * getImageLabel();
 	QNetworkAccessManager *downloadManager;
+    QSettings *config;
 };
 
 #endif // MAINWINDOW_H
