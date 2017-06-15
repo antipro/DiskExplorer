@@ -16,10 +16,13 @@
 #include <QList>
 #include <QInputDialog>
 #include <QStandardItemModel>
+#include <QtWebKit>
+#include <QtWebKitWidgets/QWebView>
 #include "flowlayout.h"
 #include "imagelabel.h"
 #include "about.h"
 #include "prerefrence.h"
+#include "authority.h"
 
 Q_DECLARE_METATYPE(QStandardItem*)
 
@@ -64,7 +67,7 @@ private slots:
 	void uploadFile();
 	void deleteFolder();
 	void refreshFolder();
-
+    void authorize();
 	void on_listView_doubleClicked(const QModelIndex &index);
 
 private:
@@ -72,6 +75,7 @@ private:
     Ui::MainWindow *ui;
 	QTranslator translator;
 	About *aboutDialog;
+    Authority *authorityDialog;
     Prerefrence *refDialog;
 	QStandardItemModel *model;
 	QNetworkDiskCache *diskCache;

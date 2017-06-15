@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     config = new QSettings("config.ini", QSettings::IniFormat);
     // 请在config.ini中添加好自己的Token。
-    token = config->value("token", QVariant("OAth")).toByteArray();
+    token = config->value("token", QVariant("OAuth")).toByteArray();
     if(config->isWritable())
         config->setValue("token", QString(token));
     setupUiEx();
@@ -162,6 +162,10 @@ void MainWindow::setupUiEx()
 	ui->listView->addAction(moveTo);
 
 	aboutDialog = new About(this);
+    authorityDialog = new Authority(this);
+    connect(authorityDialog, &Authority::success, [this](){
+        token = config->value("token", QVariant("OAuth")).toByteArray();
+    });
     refDialog = new Prerefrence(config, this);
 
 	ui->actionSimple_Chinese->setData("Simple Chinese");
@@ -458,7 +462,12 @@ void MainWindow::refreshFolder()
 {
 	QString folderName = ui->comboBox->currentText();
 	if(folderName != "")
-		this->on_comboBox_currentIndexChanged(folderName);
+        this->on_comboBox_currentIndexChanged(folderName);
+}
+
+void MainWindow::authorize()
+{
+    authorityDialog->show();
 }
 
 QNetworkRequest MainWindow::getRequest(const QUrl &url)

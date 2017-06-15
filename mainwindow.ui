@@ -105,7 +105,7 @@
           <x>0</x>
           <y>0</y>
           <width>298</width>
-          <height>312</height>
+          <height>323</height>
          </rect>
         </property>
        </widget>
@@ -120,7 +120,7 @@
      <x>0</x>
      <y>0</y>
      <width>581</width>
-     <height>28</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -129,6 +129,7 @@
     </property>
     <addaction name="actionConnect"/>
     <addaction name="actionToken"/>
+    <addaction name="actionAuthorize"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -263,6 +264,11 @@
   <action name="actionPrerefrence">
    <property name="text">
     <string>Prerefrence</string>
+   </property>
+  </action>
+  <action name="actionAuthorize">
+   <property name="text">
+    <string>Authorize</string>
    </property>
   </action>
  </widget>
@@ -447,6 +453,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionAuthorize</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>authorize()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>290</x>
+     <y>193</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>connectToDisk()</slot>
@@ -461,5 +483,6 @@
   <slot>deleteFolder()</slot>
   <slot>refreshFolder()</slot>
   <slot>prerefrence()</slot>
+  <slot>authorize()</slot>
  </slots>
 </ui>

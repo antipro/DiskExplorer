@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network webkit webkitwidgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = DiskExplorer
@@ -17,17 +17,20 @@ SOURCES += main.cpp\
     flowlayout.cpp \
     about.cpp \
     imagelabel.cpp \
-    prerefrence.cpp
+    prerefrence.cpp \
+    authority.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
     about.h \
     imagelabel.h \
-    prerefrence.h
+    prerefrence.h \
+    authority.h
 
 FORMS    += mainwindow.ui \
     about.ui \
-    prerefrence.ui
+    prerefrence.ui \
+    authority.ui
 
 RESOURCES += \
     resource.qrc
