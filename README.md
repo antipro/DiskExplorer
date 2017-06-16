@@ -1,7 +1,7 @@
 # DiskExplorer
 
 ## 编译环境
-* Qt 5.6.1 MSVC2013 64bit（Windows平台）或者Qt 5.6.1 GCC 64bit（Linux平台）
+* Qt 5.5.1 MSVC2013 64bit（Windows平台）或者Qt 5.6.1 GCC 64bit（Linux平台）
 * OpenSSL
     * Win64 [下载](https://slproweb.com/products/Win32OpenSSL.html) （我下载的是1.0.1u light版）
     * Linux 未知（Ubuntu默认就可以了）
@@ -10,9 +10,7 @@
 > Yandex的网盘速度不快
 
 ## 使用方法
-1. 想办法获取自己的Token。
-    * 先看[指南](https://tech.yandex.com/oauth/doc/dg/reference/web-client-docpage/)
-    * 需要有一个自己的服务器，要有域名，能有一个PHP脚本接收Token。
+1. 在Yandex上注册自己的账号。
 1. File->Authorize 登录到Yandex的授权网站，输入用户名和密码，一路确认，窗口自动消失说明已经成功获取token。
 1. File->Connect 连接到自己的网盘。
 1. 下拉列表中的是文件夹，只能显示顶层的。
