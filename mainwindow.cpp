@@ -288,7 +288,7 @@ void MainWindow::downloadFile(const QModelIndex &index, const QUrl &url)
 
 void MainWindow::connectToDisk()
 {
-    QUrl url("https://cloud-api.yandex.net/v1/disk/resources?path=/");
+    QUrl url("https://cloud-api.yandex.net/v1/disk/resources?path=/&limit=200");
 	QNetworkRequest request = getRequest(url);
 	QNetworkAccessManager *netManager = new QNetworkAccessManager(this);
 	connect(netManager, &QNetworkAccessManager::finished, [this](QNetworkReply *reply) {
