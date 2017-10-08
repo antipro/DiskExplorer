@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	
 	downloadManager = new QNetworkAccessManager(this);
 	downloadManager->setCache(diskCache);
-	connect(downloadManager, &QNetworkAccessManager::finished, [this](QNetworkReply *reply) {
+    connect(downloadManager, &QNetworkAccessManager::finished, [this](QNetworkReply *reply) {
 		QModelIndex index = this->replyMap[reply];
 		this->replyMap.erase(reply);
 		if (reply->error() != QNetworkReply::NoError)
@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
 		{
 			QUrl newUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
 			qDebug() << "redirected to " + newUrl.toString();
-			downloadFile(index, newUrl);
+            downloadFile(index, newUrl);
 			return;
 		}
 		ui->listView->model()->setData(index, reply->url().toString(), MainWindow::DOWNLOAD_URL);
@@ -71,7 +71,8 @@ MainWindow::MainWindow(QWidget *parent) :
 			label->setPixmap(pixmap);
 		}
 		ui->scrollAreaWidgetContents->layout()->addWidget(label);
-		reply->deleteLater();
+        reply->close();
+        delete reply;
 	});
 }
 
@@ -176,6 +177,7 @@ void MainWindow::on_comboBox_currentIndexChanged(const QString &folderName)
 {
 	if(folderName == "")
 		return;
+    this->ui->AllBtn->setDisabled(true);
 	QUrl url("https://cloud-api.yandex.net/v1/disk/resources?path=/" + folderName + "&limit=500");
 	QNetworkRequest request = getRequest(url);
 	QNetworkAccessManager *netManager = new QNetworkAccessManager(this);
@@ -202,7 +204,9 @@ void MainWindow::on_comboBox_currentIndexChanged(const QString &folderName)
 		}
 		model->clear();
 		model->appendColumn(filelist);
-		reply->deleteLater();
+        this->ui->AllBtn->setDisabled(false);
+        reply->close();
+        delete reply;
 	});
 	netManager->get(request);
 }
@@ -312,7 +316,8 @@ void MainWindow::connectToDisk()
 		}
 //		ui->listView->actions().at(1)->menu()->deleteLater();
 //		ui->listView->actions().at(1)->setMenu(subMenu);
-		reply->deleteLater();
+        reply->close();
+        delete reply;
 	});
 	netManager->get(request);
 }
@@ -416,6 +421,8 @@ void MainWindow::newFolder()
 		}else{
 			ui->statusBar->showMessage(tr("Create Failed"));
 		}
+        reply->close();
+        delete reply;
 	});
 	QByteArray postData;
 	netManager->put(request, postData);
@@ -454,6 +461,8 @@ void MainWindow::deleteFolder()
 		}else{
 			ui->statusBar->showMessage(tr("Delete Failed"));
 		}
+        reply->close();
+        delete reply;
 	});
 	netManager->deleteResource(request);
 }
@@ -500,7 +509,8 @@ QStandardItem *MainWindow::getViewItem(const QString &name, const QString &previ
 		QPixmap pixmap;
 		pixmap.loadFromData(reply->readAll());
 		viewItem->setIcon(QIcon(pixmap));
-		reply->deleteLater();
+        reply->close();
+        delete reply;
 	});
 	netManager->get(request);
 	return viewItem;
@@ -551,7 +561,8 @@ void MainWindow::on_listView_doubleClicked(const QModelIndex &index)
 		ui->listView->model()->setData(index, href, MainWindow::DOWNLOAD_URL);
 		QUrl url(href);
 		downloadFile(index, url);
-		reply->deleteLater();
+        reply->close();
+        delete reply;
 	});
 	netManager->get(request);
 }
