@@ -70,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
             }
 			label->setPixmap(pixmap);
 		}
-		ui->scrollAreaWidgetContents->layout()->addWidget(label);
+        this->flowlayout->addWidget(label);
         reply->close();
         delete reply;
 	});
@@ -85,7 +85,7 @@ MainWindow::~MainWindow()
 void MainWindow::setupUiEx()
 {
 	//reset layout of scroll area
-    FlowLayout *flowlayout = new FlowLayout();
+    flowlayout = new FlowLayout();
     ui->scrollAreaWidgetContents->setLayout(flowlayout);
 	//set width of left widget
     int width = this->size().width();
@@ -224,7 +224,7 @@ ImageLabel* MainWindow::getImageLabel()
 		QUrl url("https://cloud-api.yandex.net/v1/disk/resources?path=/" + path);
 		QNetworkRequest request = getRequest(url);
 		QNetworkAccessManager *netManager = new QNetworkAccessManager(this);
-		connect(netManager, &QNetworkAccessManager::finished, [this](QNetworkReply *reply) {
+        connect(netManager, &QNetworkAccessManager::finished, [label, this](QNetworkReply *reply) {
 			if (reply->error() != QNetworkReply::NoError)
 			{
 				ui->statusBar->showMessage(reply->errorString());
@@ -232,6 +232,8 @@ ImageLabel* MainWindow::getImageLabel()
 			}
 			int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 			if(statusCode == 204){
+                flowlayout->removeWidget(label);
+                delete label;
 				ui->statusBar->showMessage(tr("Delete Successfully"));
 			}else{
 				ui->statusBar->showMessage(tr("Delete Failed"));
@@ -254,7 +256,7 @@ ImageLabel* MainWindow::getImageLabel()
 		QNetworkRequest request = getRequest(url);
 		request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 		QNetworkAccessManager *netManager = new QNetworkAccessManager(this);
-		connect(netManager, &QNetworkAccessManager::finished, [this](QNetworkReply *reply) {
+        connect(netManager, &QNetworkAccessManager::finished, [label, this](QNetworkReply *reply) {
 			if (reply->error() != QNetworkReply::NoError)
 			{
 				ui->statusBar->showMessage(reply->errorString());
@@ -262,6 +264,8 @@ ImageLabel* MainWindow::getImageLabel()
 			}
 			int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 			if(statusCode == 201){
+                flowlayout->removeWidget(label);
+                delete label;
 				ui->statusBar->showMessage(tr("Move Successfully"));
 			}else{
 				ui->statusBar->showMessage(tr("Move Failed"));

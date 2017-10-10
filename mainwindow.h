@@ -86,6 +86,7 @@ private:
 	ImageLabel * getImageLabel();
 	QNetworkAccessManager *downloadManager;
     QSettings *config;
+    FlowLayout *flowlayout;
 };
 
 #endif // MAINWINDOW_H
